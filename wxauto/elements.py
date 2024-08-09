@@ -770,8 +770,9 @@ class SelfMessage(Message):
         self._winobj._show()
         headcontrol = [i for i in self.control.GetFirstChildControl().GetChildren() if i.ControlTypeName == 'ButtonControl'][0]
         RollIntoView(self.chatbox.ListControl(), headcontrol, equal=True)
-        xbias = int(headcontrol.BoundingRectangle.width()*1.5)
-        headcontrol.RightClick(x=-xbias, simulateMove=False)
+        xbias = int(headcontrol.BoundingRectangle.width() * 2)
+        ybias = int(headcontrol.BoundingRectangle.height() * 0.12)  # 添加 ybias 计算
+        headcontrol.RightClick(x=xbias, y=-ybias, simulateMove=False)  # 传入 y 参数
         menu = self._winobj.UiaAPI.MenuControl(ClassName='CMenuWnd')
         quote_option = menu.MenuItemControl(Name="引用")
         if not quote_option.Exists(maxSearchSeconds=0.1):
@@ -789,6 +790,7 @@ class SelfMessage(Message):
                 break
         editbox.SendKeys('{Enter}')
         return True
+
     
     def forward(self, friend):
         """转发该消息
